@@ -1,0 +1,16 @@
+/* Frontend - script.js */
+async function fetchCocktails() {
+  const ingredient = document.getElementById("ingredient").value;
+ const response = await fetch("http://localhost:5000/api/cocktails?ingredient=" + ingredient);
+  const data = await response.json();
+  document.getElementById("cocktail-list").innerHTML = data.drinks
+    .map(
+      (drink) => `
+        <div class="bg-white p-4 shadow rounded">
+          <img src="${drink.strDrinkThumb}" class="w-full h-40 object-cover rounded">
+          <h2 class="mt-2 font-bold">${drink.strDrink}</h2>
+        </div>
+      `
+    )
+    .join("");
+}
