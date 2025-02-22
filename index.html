@@ -214,52 +214,52 @@
       modal.classList.add('hidden');
     });
 
-    document.getElementById('custom-cocktail-form').addEventListener('submit', function(event) {
-      event.preventDefault(); // Prevent form submission from refreshing the page
-      var name = document.getElementById('custom-name').value.trim();
-      var ingredients = document.getElementById('custom-ingredients').value.split(',').map(ingredient => ingredient.trim()).filter(Boolean);
-      var instructions = document.getElementById('custom-instructions').value.trim();
-      var imageFile = document.getElementById('custom-image').files[0];
+  document.getElementById('custom-cocktail-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+    var name = document.getElementById('custom-name').value.trim();
+    var ingredients = document.getElementById('custom-ingredients').value.split(',').map(ingredient => ingredient.trim()).filter(Boolean);
+    var instructions = document.getElementById('custom-instructions').value.trim();
+    var imageFile = document.getElementById('custom-image').files[0];
 
-      // Validate input fields
-      if (!name || ingredients.length === 0 || !instructions) {
-        showNotification('Please fill in all fields before saving.');
-        return;
-      }
+    // Validate input fields
+    if (!name || ingredients.length === 0 || !instructions) {
+      showNotification('Please fill in all fields before saving.');
+      return;
+    }
 
-      var reader = new FileReader();
-      reader.onloadend = function() {
-        var drink = {
-          idDrink: generateUniqueId(),
-          strDrink: name,
-          strIngredient1: ingredients[0] || '',
-          strIngredient2: ingredients[1] || '',
-          strIngredient3: ingredients[2] || '',
-          strInstructions: instructions,
-          strDrinkThumb: reader.result // Save the image data as a base64 string
-        };
-
-        saveToLocalStorage(drink);
-        loadSavedCocktails();
+    var reader = new FileReader();
+    reader.onloadend = function() {
+      var drink = {
+        idDrink: generateUniqueId(),
+        strDrink: name,
+        strIngredient1: ingredients[0] || '',
+        strIngredient2: ingredients[1] || '',
+        strIngredient3: ingredients[2] || '',
+        strInstructions: instructions,
+        strDrinkThumb: reader.result // Save the image data as a base64 string
       };
 
-      if (imageFile) {
-        reader.readAsDataURL(imageFile); // Read the image file as a data URL
-      } else {
-        var drink = {
-          idDrink: generateUniqueId(),
-          strDrink: name,
-          strIngredient1: ingredients[0] || '',
-          strIngredient2: ingredients[1] || '',
-          strIngredient3: ingredients[2] || '',
-          strInstructions: instructions,
-          strDrinkThumb: '' // No image provided
-        };
+      saveToLocalStorage(drink);
+      loadSavedCocktails();
+    };
 
-        saveToLocalStorage(drink);
-        loadSavedCocktails();
-      }
-    });
+    if (imageFile) {
+      reader.readAsDataURL(imageFile); // Read the image file as a data URL
+    } else {
+      var drink = {
+        idDrink: generateUniqueId(),
+        strDrink: name,
+        strIngredient1: ingredients[0] || '',
+        strIngredient2: ingredients[1] || '',
+        strIngredient3: ingredients[2] || '',
+        strInstructions: instructions,
+        strDrinkThumb: '' // No image provided
+      };
+
+      saveToLocalStorage(drink);
+      loadSavedCocktails();
+    }
+  });
 
     function generateUniqueId() {
       return 'custom_' + Math.random().toString(36).substr(2, 9);
