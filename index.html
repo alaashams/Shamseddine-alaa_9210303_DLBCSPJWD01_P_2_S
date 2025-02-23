@@ -20,7 +20,6 @@
       background-image: url('menu-background.jpg'); /* Path to menu-background image */
       background-size: cover;
       background-position: center;
-      transform: translateX(-100%); /* Initially hide the sidebar */
     }
     .search-result img {
       height: 300px; /* Adjust the height as needed */
@@ -73,26 +72,26 @@
   <div class="container mx-auto text-center">
     <!-- Flex container for Menu Button + Search Bar -->
     <div class="flex flex-col md:flex-row items-center justify-between mt-4">
-     <!-- Menu Button Container -->
-<div class="flex justify-start w-full md:w-1/3 mb-4 md:mb-0">
-  <button id="toggle-sidebar" class="bg-green-800 hover:bg-green-900 text-white p-4 text-lg rounded shadow-md">
-    ☰ Menu
-  </button>
-</div>
-<!-- Search Bar Container -->
-<div class="flex justify-center w-full md:w-1/3 mb-4 md:mb-0">
-  <div class="flex border rounded overflow-hidden w-full md:w-auto">
-    <input type="text" id="search-input" class="p-4 text-lg border-none outline-none w-full" placeholder="Enter ingredient">
-    <button id="search-button" class="bg-green-800 text-white p-4 text-lg">Search</button>
-  </div>
-</div>
+      <!-- Menu Button Container -->
+      <div class="flex justify-start w-full md:w-1/3 mb-4 md:mb-0">
+        <button id="toggle-sidebar" class="bg-green-800 hover:bg-green-900 text-white p-4 text-lg rounded shadow-md">
+          ☰ Menu
+        </button>
+      </div>
+      <!-- Search Bar Container -->
+      <div class="flex justify-center w-full md:w-1/3 mb-4 md:mb-0">
+        <div class="flex border rounded overflow-hidden w-full md:w-auto">
+          <input type="text" id="search-input" class="p-4 text-lg border-none outline-none w-full" placeholder="Enter ingredient">
+          <button id="search-button" class="bg-green-800 text-white p-4 text-lg">Search</button>
+        </div>
+      </div>
       <!-- Empty Container to Balance Flexbox -->
       <div class="w-full md:w-1/3"></div>
     </div>
   </div>
 
   <!-- Sidebar Menu -->
-  <div id="sidebar" class="fixed top-0 left-0 h-full w-64 shadow-lg transform transition-transform duration-300 p-4">
+  <div id="sidebar" class="fixed top-0 left-0 h-full w-64 shadow-lg transform -translate-x-full transition-transform duration-300 p-4">
     <div class="flex justify-between items-center mb-4">
       <h2 class="text-2xl font-bold text-white">Menu</h2>
       <button id="close-sidebar" class="text-red-600 text-2xl font-bold">&times;</button>
@@ -105,7 +104,13 @@
       <input type="text" id="custom-ingredients" placeholder="Ingredients (comma separated)" class="border p-2 rounded block w-full mb-2">
       <textarea id="custom-instructions" placeholder="Instructions" class="border p-2 rounded block w-full mb-2"></textarea>
       <label for="custom-image" class="block text-left mb-2 text-white">Upload Picture:</label>
-      <input type="file" id="custom-image" class="border p-2 rounded block w-full mb-2">
+      <div class="flex items-center">
+        <input type="file" id="custom-image" class="border p-2 rounded block w-full mb-2">
+        <div id="image-preview" class="relative ml-4 hidden">
+          <img id="preview-img" src="" alt="Image Preview" class="w-24 h-24 object-cover rounded">
+          <button type="button" id="remove-image" class="absolute top-0 right-0 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center">&times;</button>
+        </div>
+      </div>
       <button type="submit" class="bg-green-500 text-white p-2 rounded w-full save-cocktail-button">Save Cocktail</button>
     </form>
 
@@ -128,7 +133,7 @@
   <script>
     document.getElementById('toggle-sidebar').addEventListener('click', function() {
       var sidebar = document.getElementById('sidebar');
-      sidebar.classList.toggle('translate-x-0');
+      sidebar.classList.toggle('-translate-x-full');
     });
 
     document.getElementById('close-sidebar').addEventListener('click', function() {
@@ -174,100 +179,98 @@
       document.getElementById('search-input').value = ''; // Clear search input
     });
 
-function showModal(drink) {
-  var modal = document.getElementById('modal');
-  var modalContent = document.getElementById('modal-content');
-  modalContent.innerHTML = `
-    <h2 class="text-2xl font-bold mb-4">${drink.strDrink}</h2>
-    <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}" class="w-full h-48 object-cover rounded mb-4">
-    <p><strong>Ingredients:</strong></p>
-    <ul class="list-disc list-inside mb-4">
-      ${drink.strIngredient1 ? `<li>${drink.strIngredient1} - ${drink.strMeasure1 || ''}</li>` : ''}
-      ${drink.strIngredient2 ? `<li>${drink.strIngredient2} - ${drink.strMeasure2 || ''}</li>` : ''}
-      ${drink.strIngredient3 ? `<li>${drink.strIngredient3} - ${drink.strMeasure3 || ''}</li>` : ''}
-      ${drink.strIngredient4 ? `<li>${drink.strIngredient4} - ${drink.strMeasure4 || ''}</li>` : ''}
-      ${drink.strIngredient5 ? `<li>${drink.strIngredient5} - ${drink.strMeasure5 || ''}</li>` : ''}
-      ${drink.strIngredient6 ? `<li>${drink.strIngredient6} - ${drink.strMeasure6 || ''}</li>` : ''}
-      ${drink.strIngredient7 ? `<li>${drink.strIngredient7} - ${drink.strMeasure7 || ''}</li>` : ''}
-      ${drink.strIngredient8 ? `<li>${drink.strIngredient8} - ${drink.strMeasure8 || ''}</li>` : ''}
-      ${drink.strIngredient9 ? `<li>${drink.strIngredient9} - ${drink.strMeasure9 || ''}</li>` : ''}
-      ${drink.strIngredient10 ? `<li>${drink.strIngredient10} - ${drink.strMeasure10 || ''}</li>` : ''}
-      ${drink.strIngredient11 ? `<li>${drink.strIngredient11} - ${drink.strMeasure11 || ''}</li>` : ''}
-      ${drink.strIngredient12 ? `<li>${drink.strIngredient12} - ${drink.strMeasure12 || ''}</li>` : ''}
-      ${drink.strIngredient13 ? `<li>${drink.strIngredient13} - ${drink.strMeasure13 || ''}</li>` : ''}
-      ${drink.strIngredient14 ? `<li>${drink.strIngredient14} - ${drink.strMeasure14 || ''}</li>` : ''}
-      ${drink.strIngredient15 ? `<li>${drink.strIngredient15} - ${drink.strMeasure15 || ''}</li>` : ''}
-    </ul>
-    <p><strong>Instructions:</strong></p>
-    <p>${drink.strInstructions}</p>
-  `;
-  modal.classList.remove('hidden');
+    function showModal(drink) {
+      var modal = document.getElementById('modal');
+      var modalContent = document.getElementById('modal-content');
+      modalContent.innerHTML = `
+        <h2 class="text-2xl font-bold mb-4">${drink.strDrink}</h2>
+        <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}" class="w-full h-48 object-cover rounded mb-4">
+        <p><strong>Ingredients:</strong></p>
+        <ul class="list-disc list-inside mb-4">
+          ${drink.strIngredient1 ? `<li>${drink.strIngredient1} - ${drink.strMeasure1 || ''}</li>` : ''}
+          ${drink.strIngredient2 ? `<li>${drink.strIngredient2} - ${drink.strMeasure2 || ''}</li>` : ''}
+          ${drink.strIngredient3 ? `<li>${drink.strIngredient3} - ${drink.strMeasure3 || ''}</li>` : ''}
+          ${drink.strIngredient4 ? `<li>${drink.strIngredient4} - ${drink.strMeasure4 || ''}</li>` : ''}
+          ${drink.strIngredient5 ? `<li>${drink.strIngredient5} - ${drink.strMeasure5 || ''}</li>` : ''}
+          ${drink.strIngredient6 ? `<li>${drink.strIngredient6} - ${drink.strMeasure6 || ''}</li>` : ''}
+          ${drink.strIngredient7 ? `<li>${drink.strIngredient7} - ${drink.strMeasure7 || ''}</li>` : ''}
+          ${drink.strIngredient8 ? `<li>${drink.strIngredient8} - ${drink.strMeasure8 || ''}</li>` : ''}
+          ${drink.strIngredient9 ? `<li>${drink.strIngredient9} - ${drink.strMeasure9 || ''}</li>` : ''}
+          ${drink.strIngredient10 ? `<li>${drink.strIngredient10} - ${drink.strMeasure10 || ''}</li>` : ''}
+          ${drink.strIngredient11 ? `<li>${drink.strIngredient11} - ${drink.strMeasure11 || ''}</li>` : ''}
+          ${drink.strIngredient12 ? `<li>${drink.strIngredient12} - ${drink.strMeasure12 || ''}</li>` : ''}
+          ${drink.strIngredient13 ? `<li>${drink.strIngredient13} - ${drink.strMeasure13 || ''}</li>` : ''}
+          ${drink.strIngredient14 ? `<li>${drink.strIngredient14} - ${drink.strMeasure14 || ''}</li>` : ''}
+          ${drink.strIngredient15 ? `<li>${drink.strIngredient15} - ${drink.strMeasure15 || ''}</li>` : ''}
+        </ul>
+        <p><strong>Instructions:</strong></p>
+        <p>${drink.strInstructions}</p>
+      `;
+      modal.classList.remove('hidden');
 
       // Set the delete button's onclick event to delete the current drink
- document.getElementById('delete-modal').onclick = function() {
-    deleteCocktail(drink.idDrink);
-    modal.classList.add('hidden');
-  };
-}
+      document.getElementById('delete-modal').onclick = function() {
+        deleteCocktail(drink.idDrink);
+        modal.classList.add('hidden');
+      };
+    }
 
     document.getElementById('close-modal').addEventListener('click', function() {
-  var modal = document.getElementById('modal');
-  modal.classList.add('hidden');
-});
-document.addEventListener('DOMContentLoaded', loadSavedCocktails);
+      var modal = document.getElementById('modal');
+      modal.classList.add('hidden');
+    });
 
- document.getElementById('custom-cocktail-form').addEventListener('submit', function(event) {
-  event.preventDefault();
-  var name = document.getElementById('custom-name').value.trim();
-  var ingredients = document.getElementById('custom-ingredients').value.split(',').map(ingredient => ingredient.trim()).filter(Boolean);
-  var instructions = document.getElementById('custom-instructions').value.trim();
-  var imageFile = document.getElementById('custom-image').files[0];
+    document.getElementById('custom-cocktail-form').addEventListener('submit', function(event) {
+      event.preventDefault(); // Prevent form submission from refreshing the page
+      var name = document.getElementById('custom-name').value.trim();
+      var ingredients = document.getElementById('custom-ingredients').value.split(',').map(ingredient => ingredient.trim()).filter(Boolean);
+      var instructions = document.getElementById('custom-instructions').value.trim();
+      var imageFile = document.getElementById('custom-image').files[0];
 
-  if (!name || ingredients.length === 0 || !instructions || !imageFile) {
-    alert('Please fill in all fields before saving.');
-    return;
-  }
+      // Validate input fields
+      if (!name || ingredients.length === 0 || !instructions) {
+        showNotification('Please fill in all fields before saving.');
+        return;
+      }
 
-  var reader = new FileReader();
-  reader.onloadend = function() {
-    var drink = {
-      idDrink: generateUniqueId(),
-      strDrink: name,
-      strIngredient1: ingredients[0] || '',
-      strIngredient2: ingredients[1] || '',
-      strIngredient3: ingredients[2] || '',
-      strInstructions: instructions,
-      strDrinkThumb: reader.result // Save the image data as a base64 string
-    };
+      var reader = new FileReader();
+      reader.onloadend = function() {
+        var drink = {
+          idDrink: generateUniqueId(),
+          strDrink: name,
+          strIngredient1: ingredients[0] || '',
+          strIngredient2: ingredients[1] || '',
+          strIngredient3: ingredients[2] || '',
+          strInstructions: instructions,
+          strDrinkThumb: reader.result // Save the image data as a base64 string
+        };
 
-    saveToLocalStorage(drink);
-    loadSavedCocktails();
-  };
-
-  reader.readAsDataURL(imageFile);
-});
-    
-    if (imageFile) {
-      reader.readAsDataURL(imageFile); // Read the image file as a data URL
-    } else {
-      var drink = {
-        idDrink: generateUniqueId(),
-        strDrink: name,
-        strIngredient1: ingredients[0] || '',
-        strIngredient2: ingredients[1] || '',
-        strIngredient3: ingredients[2] || '',
-        strInstructions: instructions,
-        strDrinkThumb: '' // No image provided
+        saveToLocalStorage(drink);
+        loadSavedCocktails();
       };
 
-      saveToLocalStorage(drink);
-      loadSavedCocktails();
-    }
-  });
+      if (imageFile) {
+        reader.readAsDataURL(imageFile); // Read the image file as a data URL
+      } else {
+        var drink = {
+          idDrink: generateUniqueId(),
+          strDrink: name,
+          strIngredient1: ingredients[0] || '',
+          strIngredient2: ingredients[1] || '',
+          strIngredient3: ingredients[2] || '',
+          strInstructions: instructions,
+          strDrinkThumb: '' // No image provided
+        };
 
-  function generateUniqueId() {
-  return 'custom_' + Math.random().toString(36).substr(2, 9);
-}
+        saveToLocalStorage(drink);
+        loadSavedCocktails();
+      }
+    });
+
+    function generateUniqueId() {
+      return 'custom_' + Math.random().toString(36).substr(2, 9);
+    }
+
     function saveCocktail(drinkId) {
       fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${drinkId}`)
         .then(response => response.json())
@@ -283,17 +286,19 @@ document.addEventListener('DOMContentLoaded', loadSavedCocktails);
         });
     }
 
-function saveToLocalStorage(drink) {
-  let savedCocktails = JSON.parse(localStorage.getItem('savedCocktails')) || [];
-  // Check if the drink already exists in the saved cocktails
-  if (!savedCocktails.some(savedDrink => savedDrink.idDrink === drink.idDrink)) {
-    savedCocktails.push(drink);
-    localStorage.setItem('savedCocktails', JSON.stringify(savedCocktails));
-    showNotification('Recipe saved successfully!');
-  } else {
-    showNotification('Recipe already saved!');
-  }
-}
+    function saveToLocalStorage(drink) {
+      let savedCocktails = JSON.parse(localStorage.getItem('savedCocktails')) || [];
+      
+      // Check if the drink already exists in the saved cocktails
+      if (!savedCocktails.some(savedDrink => savedDrink.idDrink === drink.idDrink)) {
+        savedCocktails.push(drink);
+        localStorage.setItem('savedCocktails', JSON.stringify(savedCocktails));
+        showNotification('Recipe saved successfully!');
+      } else {
+        showNotification('Recipe already saved!');
+      }
+    }
+
     function showNotification(message) {
       var notification = document.getElementById('notification');
       notification.textContent = message;
@@ -303,32 +308,51 @@ function saveToLocalStorage(drink) {
       }, 3000); // Hide after 3 seconds
     }
 
- function loadSavedCocktails() {
-  let savedCocktails = JSON.parse(localStorage.getItem('savedCocktails')) || [];
-  let savedCocktailList = document.getElementById('saved-cocktail-list');
-  savedCocktailList.innerHTML = ''; // Clear previous list
-  savedCocktails.forEach(drink => {
-    var savedCocktailDiv = document.createElement('div');
-    savedCocktailDiv.classList.add('p-4', 'bg-white', 'rounded', 'shadow-md', 'mb-4');
-    savedCocktailDiv.innerHTML = `
-      <div class="cursor-pointer" onclick="showModal(${JSON.stringify(drink).replace(/"/g, '&quot;')})">
-        <h3 class="text-xl font-bold">${drink.strDrink}</h3>
-        <p>${drink.strIngredient1}, ${drink.strIngredient2}, ${drink.strIngredient3}</p>
-        ${drink.strDrinkThumb ? `<img src="${drink.strDrinkThumb}" alt="${drink.strDrink}" class="w-full h-48 object-cover rounded mt-4">` : ''}
-      </div>
-      <button class="delete-cocktail-button text-white p-2 rounded w-full mt-2" onclick="event.stopPropagation(); deleteCocktail('${drink.idDrink}')">Delete Saved Recipe</button>
-    `;
-    savedCocktailList.appendChild(savedCocktailDiv);
-  });
-}
+    function loadSavedCocktails() {
+      let savedCocktails = JSON.parse(localStorage.getItem('savedCocktails')) || [];
+      let savedCocktailList = document.getElementById('saved-cocktail-list');
+      savedCocktailList.innerHTML = ''; // Clear previous list
+      savedCocktails.forEach(drink => {
+        var savedCocktailDiv = document.createElement('div');
+        savedCocktailDiv.classList.add('p-4', 'bg-white', 'rounded', 'shadow-md', 'mb-4');
+        savedCocktailDiv.innerHTML = `
+          <div class="cursor-pointer" onclick="showModal(${JSON.stringify(drink).replace(/"/g, '&quot;')})">
+            <h3 class="text-xl font-bold">${drink.strDrink}</h3>
+            <p>${drink.strIngredient1}, ${drink.strIngredient2}, ${drink.strIngredient3}</p>
+            ${drink.strDrinkThumb ? `<img src="${drink.strDrinkThumb}" alt="${drink.strDrink}" class="w-full h-48 object-cover rounded mt-4">` : ''}
+          </div>
+          <button class="delete-cocktail-button text-white p-2 rounded w-full mt-2" onclick="event.stopPropagation(); deleteCocktail('${drink.idDrink}')">Delete Saved Recipe</button>
+        `;
+        savedCocktailList.appendChild(savedCocktailDiv);
+      });
+    }
+
     function deleteCocktail(drinkId) {
-  let savedCocktails = JSON.parse(localStorage.getItem('savedCocktails')) || [];
-  savedCocktails = savedCocktails.filter(drink => drink.idDrink !== drinkId);
-  localStorage.setItem('savedCocktails', JSON.stringify(savedCocktails));
-  loadSavedCocktails();
-}
+      let savedCocktails = JSON.parse(localStorage.getItem('savedCocktails')) || [];
+      savedCocktails = savedCocktails.filter(drink => drink.idDrink !== drinkId);
+      localStorage.setItem('savedCocktails', JSON.stringify(savedCocktails));
+      loadSavedCocktails();
+    }
 
     document.addEventListener('DOMContentLoaded', loadSavedCocktails);
+
+    document.getElementById('custom-image').addEventListener('change', function(event) {
+      var file = event.target.files[0];
+      if (file) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById('preview-img').src = e.target.result;
+          document.getElementById('image-preview').classList.remove('hidden');
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    document.getElementById('remove-image').addEventListener('click', function() {
+      document.getElementById('custom-image').value = '';
+      document.getElementById('preview-img').src = '';
+      document.getElementById('image-preview').classList.add('hidden');
+    });
   </script>
 </body>
 </html>
