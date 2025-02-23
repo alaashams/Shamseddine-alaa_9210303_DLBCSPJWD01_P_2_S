@@ -141,3 +141,4 @@ document.getElementById('search-button').addEventListener('click', function() {
       resultsContainer.innerHTML = '<p class="text-red-600">Error fetching search results</p>';
     });
 });
+
