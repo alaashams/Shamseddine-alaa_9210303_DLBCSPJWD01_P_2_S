@@ -289,8 +289,8 @@
     function saveToLocalStorage(drink) {
       let savedCocktails = JSON.parse(localStorage.getItem('savedCocktails')) || [];
       
-      // Check if the drink already exists in the saved cocktails
-      if (!savedCocktails.some(savedDrink => savedDrink.idDrink === drink.idDrink)) {
+      // Check if the custom drink already exists in the saved cocktails by name
+      if (!savedCocktails.some(savedDrink => savedDrink.strDrink === drink.strDrink)) {
         savedCocktails.push(drink);
         localStorage.setItem('savedCocktails', JSON.stringify(savedCocktails));
         showNotification('Recipe saved successfully!');
