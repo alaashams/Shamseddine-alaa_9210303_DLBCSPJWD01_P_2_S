@@ -43,13 +43,11 @@ async function fetchCocktails() {
       fetchCocktails(); // Call the search function
     }
   });
-  document.getElementById("toggle-sidebar").addEventListener("click", function() {
-    const sidebar = document.getElementById("sidebar");
-    if (sidebar.classList.contains("-translate-x-full")) {
-        sidebar.classList.remove("-translate-x-full");
-    } else {
-        sidebar.classList.add("-translate-x-full");
-    }
+ document.getElementById('toggle-sidebar').addEventListener('click', function() {
+  const sidebar = document.getElementById('sidebar');
+  console.log('Menu button clicked');
+  sidebar.classList.toggle('-translate-x-full');
+  console.log('Sidebar class list:', sidebar.classList);
 });
   // Event listener for creating a custom cocktail
   document.getElementById("custom-cocktail-form").addEventListener("submit", async function (event) {
