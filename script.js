@@ -43,11 +43,14 @@ async function fetchCocktails() {
       fetchCocktails(); // Call the search function
     }
   });
- document.getElementById('toggle-sidebar').addEventListener('click', function() {
-  const sidebar = document.getElementById('sidebar');
-  console.log('Menu button clicked');
+// Toggle sidebar visibility
+document.getElementById('toggle-sidebar').addEventListener('click', function() {
+  var sidebar = document.getElementById('sidebar');
   sidebar.classList.toggle('-translate-x-full');
-  console.log('Sidebar class list:', sidebar.classList);
+});
+document.getElementById('close-sidebar').addEventListener('click', function() {
+  var sidebar = document.getElementById('sidebar');
+  sidebar.classList.add('-translate-x-full');
 });
   // Event listener for creating a custom cocktail
   document.getElementById("custom-cocktail-form").addEventListener("submit", async function (event) {
@@ -106,4 +109,35 @@ async function fetchCocktails() {
   
   // Load saved cocktails on page load
   fetchCustomCocktails();
-  
+  // Search button functionality
+document.getElementById('search-button').addEventListener('click', function() {
+  var query = document.getElementById('search-input').value;
+  var resultsContainer = document.getElementById('search-results');
+  resultsContainer.innerHTML = ''; // Clear previous results
+
+  // Fetch search results from TheCocktailDB API
+  fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${query}`)
+    .then(response => response.json())
+    .then(data => {
+      if (data.drinks) {
+        data.drinks.forEach(drink => {
+          var resultDiv = document.createElement('div');
+          resultDiv.classList.add('p-4', 'bg-white', 'rounded', 'shadow-md', 'mb-4', 'relative', 'search-result');
+          resultDiv.innerHTML = `
+            <div class="cursor-pointer" onclick="showModal(${JSON.stringify(drink).replace(/"/g, '&quot;')})">
+              <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}" class="w-full object-cover rounded mb-4">
+              <h3 class="text-xl font-bold">${drink.strDrink}</h3>
+            </div>
+            <button class="save-cocktail-button text-white p-2 rounded w-full mt-2" onclick="event.stopPropagation(); saveCocktail('${drink.idDrink}')">Save Cocktail</button>
+          `;
+          resultsContainer.appendChild(resultDiv);
+        });
+      } else {
+        resultsContainer.innerHTML = '<p class="text-red-600">No results found</p>';
+      }
+    })
+    .catch(error => {
+      console.error('Error fetching search results:', error);
+      resultsContainer.innerHTML = '<p class="text-red-600">Error fetching search results</p>';
+    });
+});
