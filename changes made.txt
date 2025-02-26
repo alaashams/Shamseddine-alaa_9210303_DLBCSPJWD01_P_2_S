@@ -1,1 +1,1 @@
-no specific changes were made in phase 3 from phase 2
+changes that were made was adding a menu bar in order to save and make custom recipes, as well as to constantly monitor the saved list while scrolling through recipes. 
