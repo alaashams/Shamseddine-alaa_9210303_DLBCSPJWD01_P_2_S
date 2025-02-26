@@ -17,12 +17,13 @@ This project is a web application that allows users to create and manage custom 
 
 ### Installation
 1. Clone the repository:
-    bash
+    ```bash
     git clone https://github.com/alaashams/Shamseddine-alaa_9210303_DLBCSPJWD01_P_2_S.git
+    ```
 2. Navigate to the project directory:
- bash
+    ```bash
     cd Shamseddine-alaa_9210303_DLBCSPJWD01_P_2_S
-  
+    ```
 
 ### Running the Web App
 1. Open `index.html` in your web browser:
@@ -34,7 +35,9 @@ This project is a web application that allows users to create and manage custom 
 - If you encounter any issues, check the browser console for errors.
 
 ## Project Structure
-- index.html: The main HTML file.
-- style.css: The main CSS file for styling.
-- script.js: The main JavaScript file for functionality.
-- assets/: Directory containing images and other assets.
+- `index.html`: The main HTML file.
+- `style.css`: The main CSS file for styling.
+- `script.js`: The main JavaScript file for functionality.
+- `assets/`: Directory containing images and other assets.
+
+
